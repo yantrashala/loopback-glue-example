@@ -1,0 +1,13 @@
+{
+  "initial:before": {
+    "loopback#favicon": {}
+  },
+  "files": {
+  },
+  "final": {
+    "loopback#urlNotFound": {}
+  },
+  "final:after": {
+    "strong-error-handler": {}
+  }
+}
