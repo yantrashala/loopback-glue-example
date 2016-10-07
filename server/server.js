@@ -2,8 +2,8 @@
 
 var loopback = require('loopback');
 var boot = require('loopback-boot');
-var glue = require('loopback-glue');
-
+//var glue = require('loopback-glue');
+var glue = require('/home/mennu/develop/loopback-glue');
 var app = module.exports = loopback();
 
 app.start = function() {
@@ -27,12 +27,12 @@ var options = {
   "subapps": [{
     "name": "child1app",
     "app" : child1app,
-    "mountPath" : "/child1"
+    "prefix": "/child1"
   },
   {
     "name": "child2app",
     "app" : child2app,
-    "mountPath" : "/child2"
+    "prefix": "/child2"
   }]
 };
 
@@ -40,9 +40,6 @@ var options = {
 // Sub-apps like REST API are mounted via boot scripts.
 glue(app, options, function(err) {
   if (err) throw err;
-
-  console.log(app._router);
-
   // start the server if `$ node server.js`
   if (require.main === module)
   app.start();

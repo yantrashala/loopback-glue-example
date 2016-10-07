@@ -1,8 +1,8 @@
 var loopback = require('loopback');
 var boot = require('loopback-boot');
+
 var app = module.exports = loopback();
-var async = require('async');
-var childConfigurations = require('./child-configurations');
+
 app.start = function() {
   // start the web server
   return app.listen(function() {
@@ -18,21 +18,18 @@ app.start = function() {
 
 // Bootstrap the application, configure models, datasources and middleware.
 // Sub-apps like REST API are mounted via boot scripts.
-bootChildApps(childConfigurations, function() {
-  boot(app, __dirname, function(err) {
+
+app.boot = function(config, cb) {
+  config = config || {};
+  config.appRootDir = config.appRootDir || __dirname;
+  boot(app, config, function(err) {
     if (err) throw err;
-
-    // start the server if `$ node server.js`
-    if (require.main === module)
-      app.start();
-  });
-})
-
-function bootChildApps(childConfigurations, cb) {
-  async.eachSeries(childConfigurations, function iteratee(item, callback) {
-    app[item.name] = require(item.appRootDir);
-    app[item.name].boot({config: item}, callback);
-  }, function done() {
     cb();
-  });
+  })
+}
+
+if (require.main == module) {
+  app.boot(function() {
+    app.start();
+  })
 }
